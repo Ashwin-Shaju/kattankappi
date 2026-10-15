@@ -1,0 +1,1082 @@
+
+/* KATTANKAPPI — page-wide motion and music visualizer */
+
+:root {
+  --kk-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Smooth navigation and page entrance */
+html {
+  scroll-behavior: smooth;
+}
+
+.app-shell {
+  animation: kk-page-enter 850ms var(--kk-motion-ease) both;
+}
+
+@keyframes kk-page-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.topbar {
+  animation: kk-drop-in 700ms var(--kk-motion-ease) both;
+}
+
+.hero-content > * {
+  animation: kk-rise-in 800ms var(--kk-motion-ease) both;
+}
+
+.hero-content > *:nth-child(1) {
+  animation-delay: 80ms;
+}
+
+.hero-content > *:nth-child(2) {
+  animation-delay: 160ms;
+}
+
+.hero-content > *:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+.hero-content > *:nth-child(4) {
+  animation-delay: 320ms;
+}
+
+.hero-content > *:nth-child(5) {
+  animation-delay: 400ms;
+}
+
+@keyframes kk-drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes kk-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cards and buttons */
+.preset-card,
+.sound-card,
+.bottom-card,
+.primary-button,
+.vibe-button {
+  transition:
+    transform 260ms var(--kk-motion-ease),
+    box-shadow 260ms ease,
+    border-color 260ms ease,
+    background-color 260ms ease;
+}
+
+.preset-card:hover,
+.sound-card:hover,
+.bottom-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px rgba(22, 44, 34, 0.11);
+}
+
+.primary-button:hover,
+.vibe-button:hover {
+  transform: translateY(-2px);
+}
+
+.primary-button:active,
+.vibe-button:active,
+.preset-card:active,
+.sound-toggle:active {
+  transform: scale(0.97);
+}
+
+.preset-card.selected {
+  animation: kk-selected-pop 420ms var(--kk-motion-ease);
+}
+
+@keyframes kk-selected-pop {
+  0% {
+    transform: scale(0.97);
+  }
+
+  65% {
+    transform: scale(1.025);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Radio glow */
+.radio-player {
+  position: relative;
+  isolation: isolate;
+  box-shadow: 0 12px 30px rgba(13, 48, 37, 0.12);
+  transition:
+    box-shadow 300ms ease,
+    transform 300ms var(--kk-motion-ease);
+}
+
+.radio-player::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 190px;
+  height: 190px;
+  top: -100px;
+  right: -65px;
+  border-radius: 50%;
+  background: rgba(228, 187, 102, 0.12);
+  filter: blur(25px);
+  pointer-events: none;
+  animation: kk-radio-glow 7s ease-in-out infinite alternate;
+}
+
+@keyframes kk-radio-glow {
+  from {
+    transform: translate(-10px, 8px) scale(0.9);
+    opacity: 0.55;
+  }
+
+  to {
+    transform: translate(-40px, 38px) scale(1.25);
+    opacity: 1;
+  }
+}
+
+/* Radio artwork rotates while music is playing */
+.radio-art {
+  position: relative;
+  transition: transform 450ms var(--kk-motion-ease);
+}
+
+.radio-player:has(.radio-control-visualizer.is-playing) .radio-art {
+  animation: kk-record-turn 5s linear infinite;
+}
+
+@keyframes kk-record-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mini equalizer beside the playing playlist track */
+.radio-song-playing {
+  display: inline-flex;
+  align-items: end;
+  justify-content: center;
+  gap: 2px;
+  width: 17px;
+  height: 14px;
+  color: #e4bb66;
+}
+
+.radio-song-playing i {
+  display: block;
+  width: 3px;
+  height: 5px;
+  border-radius: 2px;
+  background: currentColor;
+  animation: kk-mini-equalize 500ms ease-in-out infinite alternate;
+}
+
+.radio-song-playing i:nth-child(2) {
+  animation-delay: -250ms;
+}
+
+.radio-song-playing i:nth-child(3) {
+  animation-delay: -120ms;
+}
+
+@keyframes kk-mini-equalize {
+  from {
+    height: 3px;
+  }
+
+  to {
+    height: 13px;
+  }
+}
+
+/* Music controls */
+.radio-main-play {
+  transition:
+    transform 220ms var(--kk-motion-ease),
+    box-shadow 220ms ease;
+}
+
+.radio-main-play:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 7px rgba(228, 187, 102, 0.12);
+}
+
+.radio-main-play:active {
+  transform: scale(0.94);
+}
+
+.radio-progress,
+.radio-volume-slider,
+.sound-card input[type="range"] {
+  cursor: pointer;
+  accent-color: #e4bb66;
+}
+
+/* Playlist hover and active track */
+.radio-song {
+  transition:
+    background-color 180ms ease,
+    padding-left 180ms ease,
+    color 180ms ease;
+}
+
+.radio-song:hover {
+  padding-left: 7px;
+}
+
+.radio-song-active .radio-song-number {
+  animation: kk-number-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes kk-number-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* Section appearance */
+.section,
+.footer {
+  animation: kk-section-reveal 700ms var(--kk-motion-ease) both;
+}
+
+@keyframes kk-section-reveal {
+  from {
+    opacity: 0.75;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Accessibility: respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Radio controls: centered Play, volume slider after Next */
+.radio-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.radio-controls .radio-main-play {
+  order: 2;
+  flex-shrink: 0;
+}
+
+.radio-controls > button[aria-label="Previous song"] {
+  order: 1;
+  flex-shrink: 0;
+}
+
+.radio-controls > button[aria-label="Next song"] {
+  order: 3;
+  flex-shrink: 0;
+}
+
+.radio-inline-volume {
+  order: 4;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 78px;
+  width: 78px;
+  margin-left: 2px;
+  color: #e4bb66;
+}
+
+.radio-inline-volume .radio-volume-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.radio-inline-volume .radio-volume-slider {
+  display: block;
+  width: 52px;
+  min-width: 0;
+  height: 4px;
+  margin: 0;
+  accent-color: #e4bb66;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .radio-controls {
+    gap: 10px;
+  }
+
+  .radio-inline-volume {
+    width: 58px;
+    flex-basis: 58px;
+    gap: 4px;
+  }
+
+  .radio-inline-volume .radio-volume-slider {
+    width: 36px;
+  }
+}
+
+/* More compact hero banner */
+.hero-content {
+  padding-top: 35px;
+  padding-bottom: 4px;
+  gap: 8px;
+}
+
+.hero-content h1 {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  line-height: 1.05;
+}
+
+.hero-content p {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.hero-caption {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+/* Reduce the banner height on smaller screens */
+@media (max-width: 768px) {
+  .hero-content {
+    padding-top: 24px;
+    padding-bottom: 2px;
+  }
+
+  .hero-content h1 {
+    line-height: 1.1;
+  }
+}
+
+/* Extra-compact top hero banner */
+.hero-content {
+  padding-top: 12px !important;
+  padding-bottom: 0 !important;
+  gap: 4px !important;
+  min-height: auto !important;
+}
+
+.hero-content h1 {
+  margin-top: 4px !important;
+  margin-bottom: 4px !important;
+  line-height: 1.05 !important;
+}
+
+.hero-content p {
+  margin-top: 3px !important;
+  margin-bottom: 3px !important;
+  line-height: 1.4 !important;
+}
+
+.hero-caption {
+  margin-top: 4px !important;
+  line-height: 1.3 !important;
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    padding-top: 8px !important;
+    padding-bottom: 0 !important;
+  }
+
+  .hero-content h1 {
+    line-height: 1.1 !important;
+  }
+}
+
+
+/* Keep the music player compact by default */
+.radio-player .playlist {
+  display: none;
+}
+
+/* Show the playlist only when the player is expanded */
+.radio-player.expanded .playlist {
+  display: block;
+}
+
+/* Playlist expand/collapse arrow */
+.playlist-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+.playlist-toggle-arrow {
+  display: inline-block;
+  font-size: 24px;
+  line-height: 1;
+  transition: transform 250ms ease, opacity 200ms ease;
+}
+
+.playlist-toggle:hover .playlist-toggle-arrow {
+  transform: translateY(2px);
+}
+
+.playlist-toggle.is-expanded .playlist-toggle-arrow {
+  transform: translateY(-1px);
+}
+
+.playlist-toggle.is-expanded:hover .playlist-toggle-arrow {
+  transform: translateY(-3px);
+}
+
+/* Smooth playlist expansion */
+.radio-playlist {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    grid-template-rows 350ms ease,
+    opacity 250ms ease,
+    transform 350ms ease,
+    margin 350ms ease;
+  margin-top: 0;
+  overflow: hidden;
+}
+
+.radio-playlist.is-expanded {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 12px;
+}
+
+.radio-playlist-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .playlist-toggle-arrow,
+  .radio-playlist {
+    transition: none;
+  }
+}
+
+/* =========================================
+   RADIO PLAYLIST EXPAND / COLLAPSE
+   ========================================= */
+
+/* Down/up arrow button */
+.radio-queue-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid rgba(228, 187, 102, 0.22);
+  border-radius: 50%;
+  background: rgba(228, 187, 102, 0.07);
+  color: #e4bb66;
+  cursor: pointer;
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    transform 220ms ease;
+}
+
+.radio-queue-button:hover {
+  background: rgba(228, 187, 102, 0.16);
+  border-color: rgba(228, 187, 102, 0.55);
+}
+
+.radio-queue-arrow {
+  display: block;
+  font-size: 25px;
+  line-height: 1;
+  transform: translateY(-2px);
+  transition: transform 280ms ease;
+}
+
+/* Small arrow movement when expanding */
+.radio-queue-button.is-expanded .radio-queue-arrow {
+  transform: translateY(2px);
+}
+
+.radio-queue-button:active {
+  transform: scale(0.92);
+}
+
+/* Animated playlist container */
+.radio-playlist-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(-8px);
+  margin-top: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows 350ms ease,
+    opacity 250ms ease,
+    transform 350ms ease,
+    margin-top 350ms ease,
+    visibility 0s linear 350ms;
+}
+
+.radio-playlist-collapse.is-expanded {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 10px;
+  visibility: visible;
+  transition:
+    grid-template-rows 350ms ease,
+    opacity 250ms ease,
+    transform 350ms ease,
+    margin-top 350ms ease,
+    visibility 0s;
+}
+
+/* Inner wrapper allows the grid animation to collapse cleanly */
+.radio-playlist-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Keep your existing playlist appearance */
+.radio-playlist-collapse .radio-playlist {
+  min-height: 0;
+  margin-top: 0;
+}
+
+/* Animate individual song rows */
+.radio-playlist-collapse.is-expanded .radio-song {
+  animation: radioSongReveal 280ms ease both;
+}
+
+.radio-playlist-collapse.is-expanded .radio-song:nth-child(1) {
+  animation-delay: 20ms;
+}
+
+.radio-playlist-collapse.is-expanded .radio-song:nth-child(2) {
+  animation-delay: 40ms;
+}
+
+.radio-playlist-collapse.is-expanded .radio-song:nth-child(3) {
+  animation-delay: 60ms;
+}
+
+.radio-playlist-collapse.is-expanded .radio-song:nth-child(4) {
+  animation-delay: 80ms;
+}
+
+.radio-playlist-collapse.is-expanded .radio-song:nth-child(5) {
+  animation-delay: 100ms;
+}
+
+.radio-playlist-collapse.is-expanded .radio-song:nth-child(6) {
+  animation-delay: 120ms;
+}
+
+.radio-playlist-collapse.is-expanded .radio-song:nth-child(7) {
+  animation-delay: 140ms;
+}
+
+.radio-playlist-collapse.is-expanded .radio-song:nth-child(8) {
+  animation-delay: 160ms;
+}
+
+@keyframes radioSongReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accessibility: respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .radio-queue-button,
+  .radio-queue-arrow,
+  .radio-playlist-collapse,
+  .radio-playlist-collapse .radio-song {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================
+   KATTANKAPPI RADIO: VISUALIZER + PLAYLIST
+   ========================================= */
+
+/* Keep the radio controls aligned in one row */
+.radio-player .radio-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+
+/* Preserve Previous, Play, Next, Volume order */
+.radio-player .radio-controls > button[aria-label="Previous song"] {
+  order: 1;
+  flex-shrink: 0;
+}
+
+.radio-player .radio-controls .radio-main-play {
+  order: 2;
+  flex-shrink: 0;
+}
+
+.radio-player .radio-controls > button[aria-label="Next song"] {
+  order: 3;
+  flex-shrink: 0;
+}
+
+/* Volume slider stays immediately after Next */
+.radio-player .radio-controls .radio-inline-volume {
+  order: 4;
+  display: flex;
+  flex: 0 1 82px;
+  width: 82px;
+  min-width: 0;
+  align-items: center;
+  gap: 5px;
+  margin-left: 0;
+}
+
+.radio-player .radio-volume-slider {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Center the expand/collapse button and arrow */
+.radio-player .radio-queue-button {
+  display: inline-flex !important;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  cursor: pointer;
+}
+
+.radio-player .radio-queue-arrow {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  line-height: 1;
+  transform: none !important;
+  transition: transform 250ms ease;
+}
+
+.radio-player .radio-queue-button.is-expanded .radio-queue-arrow {
+  transform: none !important;
+}
+
+/* Playlist: collapsed by default, smoothly animated when opened */
+.radio-player .radio-playlist-collapse {
+  display: grid !important;
+  grid-template-rows: 0fr;
+  width: 100%;
+  min-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition:
+    grid-template-rows 350ms ease,
+    opacity 250ms ease,
+    transform 350ms ease,
+    margin-top 350ms ease,
+    visibility 0s linear 350ms;
+}
+
+.radio-player .radio-playlist-collapse.is-expanded {
+  grid-template-rows: minmax(0, 1fr);
+  margin-top: 10px;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition:
+    grid-template-rows 350ms ease,
+    opacity 250ms ease,
+    transform 350ms ease,
+    margin-top 350ms ease,
+    visibility 0s;
+}
+
+/* Important: allow the grid row to shrink to zero */
+.radio-player .radio-playlist-inner {
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Six visible rows; remaining songs scroll inside the playlist */
+.radio-player .radio-playlist-collapse .radio-playlist {
+  display: flex !important;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-height: 288px;
+  min-height: 0;
+  margin: 0;
+  padding: 0 5px 0 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #b9975b transparent;
+}
+
+/* Each song occupies its own row */
+.radio-player .radio-playlist-collapse .radio-song {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+/* Playlist scrollbar for Chrome, Edge and Safari */
+.radio-player .radio-playlist-collapse .radio-playlist::-webkit-scrollbar {
+  width: 5px;
+}
+
+.radio-player .radio-playlist-collapse .radio-playlist::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.radio-player .radio-playlist-collapse .radio-playlist::-webkit-scrollbar-thumb {
+  background: #b9975b;
+  border-radius: 10px;
+}
+
+/* Animate song rows on expansion */
+.radio-player .radio-playlist-collapse.is-expanded .radio-song {
+  animation: radioSongReveal 250ms ease both;
+}
+
+.radio-player .radio-playlist-collapse.is-expanded .radio-song:nth-child(1) {
+  animation-delay: 20ms;
+}
+
+.radio-player .radio-playlist-collapse.is-expanded .radio-song:nth-child(2) {
+  animation-delay: 40ms;
+}
+
+.radio-player .radio-playlist-collapse.is-expanded .radio-song:nth-child(3) {
+  animation-delay: 60ms;
+}
+
+.radio-player .radio-playlist-collapse.is-expanded .radio-song:nth-child(4) {
+  animation-delay: 80ms;
+}
+
+.radio-player .radio-playlist-collapse.is-expanded .radio-song:nth-child(5) {
+  animation-delay: 100ms;
+}
+
+.radio-player .radio-playlist-collapse.is-expanded .radio-song:nth-child(6) {
+  animation-delay: 120ms;
+}
+
+@keyframes radioSongReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Compact layout on mobile */
+@media (max-width: 480px) {
+  .radio-player .radio-controls {
+    gap: 7px;
+  }
+
+  .radio-player .radio-controls .radio-inline-volume {
+    flex-basis: 58px;
+    width: 58px;
+    gap: 3px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .radio-control-visualizer.is-playing span,
+  .radio-player .radio-playlist-collapse.is-expanded .radio-song {
+    animation: none !important;
+  }
+
+  .radio-player .radio-playlist-collapse,
+  .radio-player .radio-queue-arrow {
+    transition: none !important;
+  }
+}
+
+/* Fix playlist names disappearing when expanded */
+.radio-player .radio-playlist-collapse {
+  display: block !important;
+  height: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  margin-top: 0;
+  transition:
+    height 350ms ease,
+    max-height 350ms ease,
+    opacity 250ms ease,
+    margin-top 350ms ease,
+    visibility 0s linear 350ms;
+}
+
+.radio-player .radio-playlist-collapse.is-expanded {
+  height: auto;
+  max-height: 360px;
+  overflow: hidden;
+  opacity: 1;
+  visibility: visible;
+  margin-top: 10px;
+  transition:
+    max-height 350ms ease,
+    opacity 250ms ease,
+    margin-top 350ms ease,
+    visibility 0s;
+}
+
+.radio-player .radio-playlist-inner {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: visible;
+}
+
+.radio-player .radio-playlist {
+  display: flex !important;
+  flex-direction: column;
+  width: 100%;
+  max-height: 288px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.radio-player .radio-playlist .radio-song {
+  display: flex !important;
+  flex: 0 0 auto;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  overflow: visible;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.radio-player .radio-playlist .radio-song-name {
+  display: block !important;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.radio-player .radio-playlist .radio-song-number {
+  display: inline-flex !important;
+  flex: 0 0 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radio-player .radio-playlist-collapse {
+    transition: none !important;
+  }
+}
+
+/* ACTUAL FIX: Make the inner playlist visible */
+.radio-player .radio-playlist-collapse.is-expanded .radio-playlist {
+  display: flex !important;
+  flex-direction: column !important;
+  grid-template-rows: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  margin-top: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  max-height: 288px !important;
+}
+
+.radio-player .radio-playlist-collapse.is-expanded .radio-song-name {
+  display: block !important;
+  color: #f1ead9 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Kattankappi radio visualizer — immediately before Previous */
+.radio-player .radio-controls > .radio-control-visualizer {
+  order: 0;
+  display: flex;
+  flex: 0 0 48px;
+  width: 48px;
+  min-width: 48px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.radio-player .radio-controls > .radio-control-visualizer span {
+  display: block;
+  flex: 0 0 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 4px;
+  background: #e3b66c;
+}
+
+.radio-player .radio-controls > .radio-control-visualizer.is-playing span {
+  animation: kk-radio-visualizer-bars 650ms ease-in-out infinite alternate;
+}
+
+.radio-player .radio-controls > .radio-control-visualizer.is-playing span:nth-child(1) { animation-delay: -450ms; }
+.radio-player .radio-controls > .radio-control-visualizer.is-playing span:nth-child(2) { animation-delay: -200ms; }
+.radio-player .radio-controls > .radio-control-visualizer.is-playing span:nth-child(3) { animation-delay: -550ms; }
+.radio-player .radio-controls > .radio-control-visualizer.is-playing span:nth-child(4) { animation-delay: -100ms; }
+.radio-player .radio-controls > .radio-control-visualizer.is-playing span:nth-child(5) { animation-delay: -350ms; }
+.radio-player .radio-controls > .radio-control-visualizer.is-playing span:nth-child(6) { animation-delay: -500ms; }
+.radio-player .radio-controls > .radio-control-visualizer.is-playing span:nth-child(7) { animation-delay: -250ms; }
+
+@keyframes kk-radio-visualizer-bars {
+  from { height: 4px; }
+  to { height: 30px; }
+}
+
+@media (max-width: 480px) {
+  .radio-player .radio-controls > .radio-control-visualizer {
+    flex-basis: 34px;
+    width: 34px;
+    min-width: 34px;
+    height: 28px;
+    gap: 3px;
+  }
+
+  .radio-player .radio-controls > .radio-control-visualizer span {
+    flex-basis: 3px;
+    width: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radio-player .radio-controls > .radio-control-visualizer.is-playing span {
+    animation: none !important;
+    height: 12px;
+  }
+}
+
+/* Smooth playlist close: collapse, fade, and slide upward together. */
+.radio-player .radio-playlist-collapse {
+  transform: translateY(-8px);
+  transition:
+    max-height 350ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 250ms ease,
+    transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
+    margin-top 350ms ease,
+    visibility 0s linear 350ms;
+}
+
+.radio-player .radio-playlist-collapse.is-expanded {
+  transform: translateY(0);
+  transition:
+    max-height 350ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 250ms ease,
+    transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
+    margin-top 350ms ease,
+    visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radio-player .radio-playlist-collapse {
+    transform: none !important;
+    transition: none !important;
+  }
+}
