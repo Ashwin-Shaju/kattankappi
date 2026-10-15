@@ -222,7 +222,9 @@ function App() {
         audioRefs.current.forEach((audio) => {
           if (audio) audio.pause();
         });
+
         if (musicAudioRef.current) musicAudioRef.current.pause();
+
         shouldAutoplayRef.current = false;
         setVolumes([0, 0, 0, 0, 0, 0]);
         setPlaying(false);
@@ -246,7 +248,11 @@ function App() {
       return;
     }
 
-    const minutes = Math.min(720, Math.max(1, Number(sleepMinutes) || 1));
+    const minutes = Math.min(
+      720,
+      Math.max(1, Number(sleepMinutes) || 1)
+    );
+
     setSleepMinutes(minutes);
     setSleepTimerRemaining(minutes * 60);
     setSleepTimerEndAt(Date.now() + minutes * 60 * 1000);
@@ -510,6 +516,7 @@ function App() {
 
               <div className={`sleep-timer ${sleepTimerActive ? "is-active" : ""}`}>
                 <label htmlFor="sleep-timer-minutes">Sleep timer</label>
+
                 <div className="sleep-timer-controls">
                   <input
                     id="sleep-timer-minutes"
@@ -521,11 +528,17 @@ function App() {
                     disabled={sleepTimerActive}
                     onChange={(event) => {
                       const value = event.target.value;
-                      setSleepMinutes(value === "" ? "" : Math.min(720, Math.max(1, Number(value))));
+                      setSleepMinutes(
+                        value === ""
+                          ? ""
+                          : Math.min(720, Math.max(1, Number(value)))
+                      );
                     }}
                     aria-label="Sleep timer duration in minutes"
                   />
+
                   <span>min</span>
+
                   <button
                     type="button"
                     className="sleep-timer-button"
@@ -534,12 +547,18 @@ function App() {
                     {sleepTimerActive ? "Cancel" : "Start"}
                   </button>
                 </div>
-                <div className="sleep-timer-presets" aria-label="Quick sleep timer presets">
+
+                <div
+                  className="sleep-timer-presets"
+                  aria-label="Quick sleep timer presets"
+                >
                   {[15, 30, 60, 120].map((minutes) => (
                     <button
                       key={minutes}
                       type="button"
-                      className={`sleep-timer-preset ${Number(sleepMinutes) === minutes ? "selected" : ""}`}
+                      className={`sleep-timer-preset ${
+                        Number(sleepMinutes) === minutes ? "selected" : ""
+                      }`}
                       onClick={() => setSleepMinutes(minutes)}
                       disabled={sleepTimerActive}
                       aria-pressed={Number(sleepMinutes) === minutes}
@@ -548,6 +567,7 @@ function App() {
                     </button>
                   ))}
                 </div>
+
                 {sleepTimerActive && (
                   <span className="sleep-timer-countdown" role="status">
                     Stops in {formatSleepTime(sleepTimerRemaining)}
@@ -617,7 +637,6 @@ function App() {
                 </h3>
 
                 <p>Malayalam melodies · Chaya-time playlist</p>
-
               </div>
 
               <button
@@ -825,20 +844,35 @@ function App() {
 
       <footer className="footer">
         <strong>☕ KATTANKAPPI</strong>
+
         <span>നമ്മുടെ നാട്. നമ്മുടെ ശബ്ദങ്ങൾ.</span>
+
+        {/* Instagram link with your name */}
         <a
           className="footer-instagram"
           href="https://www.instagram.com/a.shwi.n._/"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Visit a.shwi.n._ on Instagram"
+          aria-label="Ashwin Shaju on Instagram"
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
             <rect x="3" y="3" width="18" height="18" rx="5" />
             <circle cx="12" cy="12" r="4" />
-            <circle className="instagram-icon-dot" cx="17.5" cy="6.5" r="1" />
+            <circle
+              className="instagram-icon-dot"
+              cx="17.5"
+              cy="6.5"
+              r="1"
+            />
           </svg>
+
+          <span>Ashwin Shaju</span>
         </a>
+
         <span>MADE WITH ♥ IN KERALA</span>
       </footer>
     </div>
