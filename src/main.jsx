@@ -799,7 +799,7 @@ function App() {
               preload="auto"
               onLoadedMetadata={(event) => {
                 setMusicDuration(event.currentTarget.duration || 0);
-                event.currentTarget.volume = musicVolume / 100;
+                setAudioElementVolume(event.currentTarget, musicVolume / 100);
                 setMusicError(false);
               }}
               onCanPlay={() => {
@@ -835,6 +835,8 @@ function App() {
               </div>
 
               <button
+                type="button"
+                className="radio-skip-button"
                 onClick={() =>
                   changeTrack(
                     (trackIndex - 1 + musicTracks.length) %
@@ -844,26 +846,41 @@ function App() {
                 aria-label="Previous song"
                 title="Previous song"
               >
-                |◀
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M6 5v14M19 6 8 12l11 6V6Z" />
+                </svg>
               </button>
 
               <button
+                type="button"
                 className="radio-main-play"
                 onClick={toggleMusicPlayback}
                 aria-label={musicPlaying ? "Pause music" : "Play music"}
                 title={musicPlaying ? "Pause" : "Play"}
               >
-                {musicPlaying ? "Ⅱ" : "▶"}
+                {musicPlaying ? (
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M8 5h3v14H8zM15 5h3v14h-3z" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="m8 5 11 7-11 7V5Z" />
+                  </svg>
+                )}
               </button>
 
               <button
+                type="button"
+                className="radio-skip-button"
                 onClick={() =>
                   changeTrack((trackIndex + 1) % musicTracks.length)
                 }
                 aria-label="Next song"
                 title="Next song"
               >
-                ▶|
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M18 5v14M5 6l11 6-11 6V6Z" />
+                </svg>
               </button>
 
               <div className="radio-inline-volume">
@@ -880,10 +897,15 @@ function App() {
                   type="range"
                   min="0"
                   max="100"
+                  step="1"
                   value={musicVolume}
-                  aria-label="Music volume"
+                  aria-label={`Music volume ${musicVolume}%`}
+                  aria-valuetext={`${musicVolume}%`}
+                  onInput={(event) =>
+                    updateMusicVolume(event.currentTarget.value)
+                  }
                   onChange={(event) =>
-                    updateMusicVolume(event.target.value)
+                    updateMusicVolume(event.currentTarget.value)
                   }
                 />
               </div>
@@ -897,10 +919,19 @@ function App() {
               step="0.1"
               value={Math.min(musicTime, musicDuration || 100)}
               aria-label="Song progress"
-              onChange={(event) => {
-                const time = Number(event.target.value);
+              aria-valuetext={`${formatMusicTime(musicTime)} of ${formatMusicTime(musicDuration)}`}
+              onInput={(event) => {
+                const time = Number(event.currentTarget.value);
 
-                if (musicAudioRef.current) {
+                if (musicAudioRef.current && Number.isFinite(time)) {
+                  musicAudioRef.current.currentTime = time;
+                  setMusicTime(time);
+                }
+              }}
+              onChange={(event) => {
+                const time = Number(event.currentTarget.value);
+
+                if (musicAudioRef.current && Number.isFinite(time)) {
                   musicAudioRef.current.currentTime = time;
                   setMusicTime(time);
                 }
@@ -913,7 +944,7 @@ function App() {
             </div>
 
             <div className="radio-playlist-heading">
-              YOUR PLAYLIST · 8 SONGS
+              YOUR PLAYLIST · {musicTracks.length} SONGS
             </div>
 
             {/* Always mounted so the expand/collapse animation can run. */}
