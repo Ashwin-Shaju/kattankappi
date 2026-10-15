@@ -109,6 +109,38 @@ const musicTracks = [
     name: "Payye Veesum",
     file: "Payye Veesum.mp3",
   },
+    {
+    name: "Sneham Cherum Neram",
+    file: "Sneham Cherum Neram.mp3",
+  },
+      {
+    name: "Kathal Oviyam - From _Alaigal Oyvatillai_",
+    file: "Kathal Oviyam - From _Alaigal Oyvatillai_.mp3",
+  },
+      {
+    name: "Innum Konjam Neram",
+    file: "Innum Konjam Neram.mp3",
+  },
+      {
+    name: "Netru Illatha Maatram",
+    file: "Netru Illatha Maatram.mp3",
+  },
+      {
+    name: "Enna Vilai",
+    file: "Enna Vilai.mp3",
+  },
+      {
+    name: "Chinna Chinna Asai",
+    file: "Chinna Chinna Asai.mp3",
+  },
+      {
+    name: "Kaattrae En Vaasal - Wind",
+    file: "Kaattrae En Vaasal - Wind.mp3",
+  },
+      {
+    name: "Oru Kaathilola",
+    file: "Oru Kaathilola.mp3",
+  },
 ];
 
 function getMusicUrl(filename) {
@@ -652,9 +684,25 @@ function App() {
                 aria-controls="radio-playlist-content"
                 title={playlistOpen ? "Collapse playlist" : "Expand playlist"}
               >
-                <span className="radio-queue-arrow" aria-hidden="true">
-                  {playlistOpen ? "⌃" : "⌄"}
-                </span>
+                <svg
+                  className="radio-queue-arrow"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                  style={{
+                    transform: playlistOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.3s ease, color 0.3s ease",
+                  }}
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
               </button>
             </div>
 
