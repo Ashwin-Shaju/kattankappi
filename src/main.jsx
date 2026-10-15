@@ -182,6 +182,10 @@ function App() {
   const musicAudioRef = useRef(null);
   const shouldAutoplayRef = useRef(false);
 
+  // Web Audio gain nodes provide reliable per-sound volume control on mobile Safari.
+  const audioContextRef = useRef(null);
+  const audioGraphRef = useRef(new WeakMap());
+
   const currentTrack = musicTracks[trackIndex];
 
   function formatMusicTime(seconds) {
@@ -195,10 +199,75 @@ function App() {
     return `${mins}:${secs}`;
   }
 
-  // Keep music volume synchronized with the slider.
+  function getAudioContext() {
+    if (typeof window === "undefined") return null;
+
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) return null;
+
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContextClass();
+    }
+
+    return audioContextRef.current;
+  }
+
+  function resumeAudioContext() {
+    const context = getAudioContext();
+
+    if (context && context.state === "suspended") {
+      context.resume().catch((error) => {
+        console.warn("Could not resume the audio context.", error);
+      });
+    }
+
+    return context;
+  }
+
+  function setAudioElementVolume(audio, volume) {
+    if (!audio) return;
+
+    const level = Math.max(0, Math.min(1, Number(volume) || 0));
+    const context = getAudioContext();
+
+    if (context) {
+      try {
+        let graph = audioGraphRef.current.get(audio);
+
+        if (!graph) {
+          const source = context.createMediaElementSource(audio);
+          const gain = context.createGain();
+
+          source.connect(gain);
+          gain.connect(context.destination);
+
+          graph = { source, gain, context };
+          audioGraphRef.current.set(audio, graph);
+        }
+
+        if (graph.context === context) {
+          graph.gain.gain.setTargetAtTime(
+            level,
+            context.currentTime,
+            0.015
+          );
+          return;
+        }
+      } catch (error) {
+        // Fall back to the native volume property if Web Audio is unavailable.
+        console.warn("Using native audio volume as a fallback.", error);
+      }
+    }
+
+    audio.volume = level;
+  }
+
+  // Keep radio volume synchronized with the slider.
   useEffect(() => {
     if (musicAudioRef.current) {
-      musicAudioRef.current.volume = musicVolume / 100;
+      setAudioElementVolume(musicAudioRef.current, musicVolume / 100);
     }
   }, [musicVolume, trackIndex]);
 
@@ -206,10 +275,7 @@ function App() {
     audioRefs.current.forEach((audio, index) => {
       if (!audio) return;
 
-      audio.volume = Math.max(
-        0,
-        Math.min(1, (levels[index] ?? 0) / 100)
-      );
+      setAudioElementVolume(audio, (levels[index] ?? 0) / 100);
 
       if (shouldPlay && levels[index] > 0) {
         audio.play().catch((error) => {
@@ -225,6 +291,8 @@ function App() {
   }
 
   function togglePlayback() {
+    resumeAudioContext();
+
     if (playing) {
       syncAudio(volumes, false);
       setPlaying(false);
@@ -338,7 +406,8 @@ function App() {
     if (!audio || !shouldAutoplayRef.current) return;
 
     try {
-      audio.volume = musicVolume / 100;
+      resumeAudioContext();
+      setAudioElementVolume(audio, musicVolume / 100);
       await audio.play();
 
       shouldAutoplayRef.current = false;
@@ -356,6 +425,8 @@ function App() {
   async function toggleMusicPlayback() {
     const audio = musicAudioRef.current;
     if (!audio) return;
+
+    resumeAudioContext();
 
     if (musicPlaying) {
       shouldAutoplayRef.current = false;
@@ -382,6 +453,7 @@ function App() {
   }
 
   function choosePreset(index) {
+    resumeAudioContext();
     setPresetIndex(index);
     setVolumes([...presets[index].volumes]);
     setVibe(true);
@@ -389,6 +461,7 @@ function App() {
   }
 
   function updateVolume(index, value) {
+    resumeAudioContext();
     const nextVolumes = volumes.map((volume, i) =>
       i === index ? Number(value) : volume
     );
@@ -405,6 +478,7 @@ function App() {
   }
 
   function toggleSound(index) {
+    resumeAudioContext();
     const isCurrentlyOn = volumes[index] > 0;
 
     if (isCurrentlyOn) {
@@ -431,6 +505,8 @@ function App() {
   }
 
   function toggleVibe() {
+    resumeAudioContext();
+
     if (vibe) {
       // Vibe off: stop all ambience sounds without changing the selected preset.
       setVolumes([0, 0, 0, 0, 0, 0]);
@@ -447,6 +523,17 @@ function App() {
 
   function togglePlaylist() {
     setPlaylistOpen((open) => !open);
+  }
+
+  function updateMusicVolume(value) {
+    const nextVolume = Number(value);
+    resumeAudioContext();
+
+    if (musicAudioRef.current) {
+      setAudioElementVolume(musicAudioRef.current, nextVolume / 100);
+    }
+
+    setMusicVolume(nextVolume);
   }
 
   return (
@@ -796,7 +883,7 @@ function App() {
                   value={musicVolume}
                   aria-label="Music volume"
                   onChange={(event) =>
-                    setMusicVolume(Number(event.target.value))
+                    updateMusicVolume(event.target.value)
                   }
                 />
               </div>
