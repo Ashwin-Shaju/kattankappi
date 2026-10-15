@@ -812,7 +812,7 @@ function App() {
             {musicError && (
               <p className="radio-error" role="alert">
                 Couldn't load this song. Check that the exact MP3 filename
-                exists in public/audio/ and is included in the Vercel deployment.
+                exists in Public/audio/ and is included in the Vercel deployment.
               </p>
             )}
           </article>
