@@ -431,7 +431,7 @@ function App() {
           <span className="brand-icon">☕</span>
           <span>
             <strong>kattankappi</strong>
-            <small>ഒരു ചായ, കുറച്ചു നേരം</small>
+            <small>ഒരു കാപ്പി, കുറച്ചു സമാധാനം</small>
           </span>
         </a>
 
