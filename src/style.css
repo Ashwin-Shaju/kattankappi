@@ -459,8 +459,29 @@ button:focus-visible, input:focus-visible {
 }
 .radio-controls > button[aria-label="Next song"] { order: 3; }
 
-.radio-inline-volume {
+.radio-controls > .radio-shuffle-button {
   order: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(239,232,210,.16);
+  border-radius: 9px;
+  background: rgba(255,255,255,.055);
+  color: #eee8d8;
+  cursor: pointer;
+  transition: transform .22s ease, background .25s ease, border-color .25s ease, color .25s ease;
+}
+.radio-controls > .radio-shuffle-button:hover { transform: translateY(-2px); background: rgba(255,255,255,.105); border-color: rgba(220,202,153,.35); }
+.radio-controls > .radio-shuffle-button:active { transform: scale(.94); }
+.radio-controls > .radio-shuffle-button.is-active { color: #e4bb66; border-color: rgba(228,187,102,.7); background: rgba(228,187,102,.14); box-shadow: 0 0 0 2px rgba(228,187,102,.08); }
+.radio-shuffle-icon { display: block; width: 19px; height: 19px; fill: currentColor; }
+
+.radio-inline-volume {
+  order: 5;
   display: flex;
   flex: 0 1 82px;
   width: 82px;
@@ -2013,35 +2034,6 @@ button:focus-visible, input:focus-visible {
   accent-color: #b48a42 !important;
 }
 
-
-/* Buy Me a Coffee footer button */
-.footer-buymeacoffee {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 100%;
-  line-height: 0;
-  border-radius: 8px;
-  transition: transform 180ms ease, opacity 180ms ease;
-}
-
-.footer-buymeacoffee img {
-  display: block;
-  width: 190px;
-  max-width: 100%;
-  height: auto;
-}
-
-.footer-buymeacoffee:hover {
-  transform: translateY(-2px);
-  opacity: 0.94;
-}
-
-.footer-buymeacoffee:focus-visible {
-  outline: 2px solid var(--gold, #b48a42);
-  outline-offset: 4px;
-}
-
-@media (max-width: 600px) {
-  .footer-buymeacoffee img { width: 175px; }
-}
+/* Shuffle button matches the radio controls in light theme. */
+:root[data-theme="light"] .radio-player .radio-controls > .radio-shuffle-button { color: #355642; }
+:root[data-theme="light"] .radio-player .radio-controls > .radio-shuffle-button.is-active { color: #94702f; border-color: rgba(180,138,66,.75); background: rgba(195,154,81,.16); }

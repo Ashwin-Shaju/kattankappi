@@ -205,9 +205,10 @@ function App() {
   // Radio player state.
   const [trackIndex, setTrackIndex] = useState(5);
   const [musicPlaying, setMusicPlaying] = useState(false);
+  const [shuffleEnabled, setShuffleEnabled] = useState(false);
   const [musicTime, setMusicTime] = useState(0);
   const [musicDuration, setMusicDuration] = useState(0);
-  const [musicVolume, setMusicVolume] = useState(70);
+  const [musicVolume, setMusicVolume] = useState(25);
   const [musicError, setMusicError] = useState(false);
 
   // Start with the playlist collapsed.
@@ -381,7 +382,7 @@ function App() {
       }
     });
     register("previoustrack", () => changeTrack(trackIndex - 1));
-    register("nexttrack", () => changeTrack(trackIndex + 1));
+    register("nexttrack", () => playNextTrack());
     register("seekbackward", (details) => {
       const audio = musicAudioRef.current;
       if (audio) audio.currentTime = Math.max(0, audio.currentTime - (details.seekOffset || 10));
@@ -581,8 +582,36 @@ function App() {
     }
   }
 
-  function handleMusicEnded() {
+  function playNextTrack() {
+    if (shuffleEnabled && musicTracks.length > 1) {
+      // Pick a different song so shuffle never repeats the current track immediately.
+      let nextIndex = trackIndex;
+      while (nextIndex === trackIndex) {
+        nextIndex = Math.floor(Math.random() * musicTracks.length);
+      }
+      changeTrack(nextIndex);
+      return;
+    }
+
     changeTrack((trackIndex + 1) % musicTracks.length);
+  }
+
+  function handleMusicEnded() {
+    playNextTrack();
+  }
+
+  function toggleShuffle() {
+    setShuffleEnabled((enabled) => !enabled);
+  }
+
+  // Start the music when a preset or Vibe On is selected, without toggling
+  // music off if it is already playing. Calling play from this click handler
+  // also gives mobile browsers the user gesture needed to allow playback.
+  function ensureMusicPlaying() {
+    const audio = musicAudioRef.current;
+    if (audio && audio.paused) {
+      void toggleMusicPlayback();
+    }
   }
 
   function choosePreset(index) {
@@ -591,6 +620,7 @@ function App() {
     setVolumes([...presets[index].volumes]);
     setVibe(true);
     setPlaying(true);
+    ensureMusicPlaying();
   }
 
   function updateVolume(index, value) {
@@ -641,10 +671,17 @@ function App() {
     resumeAudioContext();
 
     if (vibe) {
-      // Vibe off: stop all ambience sounds without changing the selected preset.
+      // Vibe off: stop ambience and music without changing the selected preset.
       setVolumes([0, 0, 0, 0, 0, 0]);
       setPlaying(false);
       setVibe(false);
+
+      // Stop the music player too, and prevent any pending autoplay.
+      shouldAutoplayRef.current = false;
+      if (musicAudioRef.current) {
+        musicAudioRef.current.pause();
+      }
+      setMusicPlaying(false);
       return;
     }
 
@@ -652,6 +689,7 @@ function App() {
     setVolumes([40, 0, 0, 0, 0, 0]);
     setPlaying(true);
     setVibe(true);
+    ensureMusicPlaying();
   }
 
   function togglePlaylist() {
@@ -1127,15 +1165,26 @@ function App() {
               <button
                 type="button"
                 className="radio-skip-button"
-                onClick={() =>
-                  changeTrack((trackIndex + 1) % musicTracks.length)
-                }
+                onClick={playNextTrack}
                 aria-label="Next song"
                 title="Next song"
               >
                 <svg className="radio-skip-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                   <path d="M4 5.5a.8.8 0 0 1 1.2-.7l11.3 6.5a.8.8 0 0 1 0 1.4L5.2 19.2a.8.8 0 0 1-1.2-.7v-13Z" />
                   <rect x="17.5" y="5" width="2.5" height="14" rx="0.7" />
+                </svg>
+              </button>
+
+              <button
+                type="button"
+                className={`radio-shuffle-button${shuffleEnabled ? " is-active" : ""}`}
+                onClick={toggleShuffle}
+                aria-label={shuffleEnabled ? "Turn shuffle off" : "Turn shuffle on"}
+                aria-pressed={shuffleEnabled}
+                title={shuffleEnabled ? "Shuffle on" : "Shuffle off"}
+              >
+                <svg className="radio-shuffle-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M16 3h5v5h-2V6.41l-4.2 4.2-1.42-1.42 4.2-4.19H16V3ZM3 6h3.2c1.7 0 2.8.7 4 2.2l4.6 5.6c.8 1 1.3 1.2 2.2 1.2H19v-2l3 3-3 3v-2h-2c-1.7 0-2.8-.7-4-2.2L8.4 9.2C7.6 8.2 7.1 8 6.2 8H3V6Zm0 10h3.2c.9 0 1.4-.2 2.2-1.2l1.1-1.3 1.4 1.7-.9 1.1c-1.2 1.5-2.3 2.2-4 2.2H3v-2Z" />
                 </svg>
               </button>
 
