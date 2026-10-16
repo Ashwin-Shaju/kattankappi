@@ -1310,12 +1310,7 @@ function App() {
         </div>
       </section>
 
-      <footer className="footer">
-        <strong>☕ KATTANKAPPI</strong>
-
-        <span>നമ്മുടെ നാട്. നമ്മുടെ ശബ്ദങ്ങൾ.</span>
-
-        {/* Instagram link with your name */}
+      <footer className="footer footer-redesigned">
         <a
           className="footer-instagram"
           href="https://www.instagram.com/a.shwi.n._/"
@@ -1330,32 +1325,46 @@ function App() {
           >
             <rect x="3" y="3" width="18" height="18" rx="5" />
             <circle cx="12" cy="12" r="4" />
-            <circle
-              className="instagram-icon-dot"
-              cx="17.5"
-              cy="6.5"
-              r="1"
-            />
+            <circle className="instagram-icon-dot" cx="17.5" cy="6.5" r="1" />
           </svg>
-
           <span>Ashwin Shaju</span>
         </a>
 
-        <a
-          className="footer-buymeacoffee"
-          href="https://www.buymeacoffee.com/ashwnshaju"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Buy Ashwin a coffee on Buy Me a Coffee"
-        >
-          <img
-            src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=ashwnshaju&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"
-            alt="Buy me a coffee"
-            loading="lazy"
-          />
-        </a>
+        <div className="footer-brandline">
+          <strong>☕ KATTANKAPPI</strong>
+          <span>നമ്മുടെ നാട്. നമ്മുടെ ശബ്ദങ്ങൾ.</span>
+        </div>
 
-        <span>MADE WITH ♥ IN KERALA</span>
+        <div className="footer-support-actions">
+          <a
+            className="footer-paytm"
+            href="upi://pay?pa=ashwin.shaju%40ptyes&pn=Ashwin%20Shaju&tn=Support%20Kattankappi&cu=INR"
+            aria-label="Open a UPI app with Ashwin Shaju and ashwin.shaju@ptyes prefilled to support Kattankappi"
+            title="Open your UPI app with ashwin.shaju@ptyes prefilled"
+          >
+            <span className="footer-paytm-mark" aria-hidden="true">₹</span>
+            <span className="footer-paytm-copy">
+              <strong>Support me</strong>
+              <small>ashwin.shaju@ptyes</small>
+            </span>
+          </a>
+
+          <a
+            className="footer-buymeacoffee"
+            href="https://www.buymeacoffee.com/ashwnshaju"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Buy Ashwin a coffee on Buy Me a Coffee"
+          >
+            <img
+              src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=ashwnshaju&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"
+              alt="Buy me a coffee"
+              loading="lazy"
+            />
+          </a>
+        </div>
+
+        <span className="footer-made-in-kerala">Made with <span aria-label="love">♥</span> in Kerala</span>
       </footer>
     </div>
   );

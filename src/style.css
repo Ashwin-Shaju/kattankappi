@@ -1139,8 +1139,8 @@ button:focus-visible, input:focus-visible {
 /* Kattankappi Radio — premium glassmorphism */
 /* Keep the collapsed music player compact like an ambience card. */
 .radio-player.playlist-collapsed {
-  height: 200px !important;
-  min-height: 200px !important;
+  height: 210px !important;
+  min-height: 210px !important;
   box-sizing: border-box !important;
   display: flex !important;
   flex-direction: column !important;
@@ -1172,7 +1172,7 @@ button:focus-visible, input:focus-visible {
 .radio-player.playlist-open { height: auto !important; min-height: 0 !important; }
 
 @media (max-width: 600px) {
-  .radio-player.playlist-collapsed { height: 200px !important; min-height: 200px !important; padding: 15px !important; }
+  .radio-player.playlist-collapsed { height: 210px !important; min-height: 210px !important; padding: 15px !important; }
 }
 
 .radio-player {
@@ -2037,3 +2037,191 @@ button:focus-visible, input:focus-visible {
 /* Shuffle button matches the radio controls in light theme. */
 :root[data-theme="light"] .radio-player .radio-controls > .radio-shuffle-button { color: #355642; }
 :root[data-theme="light"] .radio-player .radio-controls > .radio-shuffle-button.is-active { color: #94702f; border-color: rgba(180,138,66,.75); background: rgba(195,154,81,.16); }
+
+
+/* Compact support links in the footer */
+.footer-buymeacoffee {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  max-width: 132px;
+  line-height: 0;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.footer-buymeacoffee img {
+  display: block;
+  width: 100%;
+  max-width: 132px;
+  height: auto;
+}
+
+.footer-buymeacoffee:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+
+.footer-buymeacoffee:focus-visible,
+.footer-paytm:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.footer-paytm {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 7px 10px;
+  border: 1px solid rgba(227, 182, 108, 0.24);
+  border-radius: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0;
+  transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.footer-paytm-mark {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  flex: 0 0 27px;
+  border-radius: 8px;
+  background: #e3f4ff;
+  color: #0077b6;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.footer-paytm-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.footer-paytm-copy strong {
+  color: var(--cream);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.footer-paytm-copy small {
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.footer-paytm:hover {
+  border-color: rgba(227, 182, 108, 0.62);
+  background: rgba(227, 182, 108, 0.07);
+  transform: translateY(-1px);
+}
+
+:root[data-theme="light"] .footer-paytm-copy strong {
+  color: #20392e;
+}
+
+@media (max-width: 760px) {
+  .footer-buymeacoffee { max-width: 118px; }
+  .footer-buymeacoffee img { max-width: 118px; }
+  .footer-paytm { order: 4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-buymeacoffee,
+  .footer-paytm { transition: none; }
+}
+
+
+/* Footer layout inspired by Ashwin's sketch; existing logo artwork is preserved. */
+.footer.footer-redesigned {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 17px;
+  padding: 24px 0 20px;
+  min-height: 0;
+  text-align: center;
+}
+
+.footer-redesigned .footer-instagram {
+  align-self: center;
+  order: 0;
+  padding: 6px 12px;
+  font-size: 10px;
+  letter-spacing: .4px;
+}
+
+.footer-brandline {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+
+.footer-redesigned .footer-brandline > strong {
+  color: var(--cream);
+  font-size: 12px;
+  letter-spacing: 1.8px;
+}
+
+.footer-brandline > span {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: .2px;
+}
+
+.footer-support-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  width: 100%;
+}
+
+.footer-redesigned .footer-paytm {
+  order: 0;
+  min-height: 40px;
+  border-radius: 9px;
+}
+
+.footer-redesigned .footer-buymeacoffee {
+  order: 0;
+  max-width: 132px;
+}
+
+.footer-redesigned .footer-buymeacoffee img {
+  max-width: 132px;
+}
+
+.footer-made-in-kerala {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: .5px;
+  text-transform: none;
+}
+
+.footer-made-in-kerala > span {
+  color: #d87572;
+  padding: 0 2px;
+}
+
+@media (max-width: 520px) {
+  .footer.footer-redesigned { gap: 15px; padding: 22px 0 18px; }
+  .footer-brandline { flex-direction: column; gap: 7px; }
+  .footer-brandline > span { font-size: 10px; }
+  .footer-support-actions { gap: 10px; }
+  .footer-redesigned .footer-paytm { padding: 7px 9px; }
+  .footer-redesigned .footer-buymeacoffee,
+  .footer-redesigned .footer-buymeacoffee img { max-width: 120px; }
+}
