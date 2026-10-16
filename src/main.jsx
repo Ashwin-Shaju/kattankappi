@@ -141,6 +141,34 @@ const musicTracks = [
     name: "Oru Kaathilola",
     file: "Oru Kaathilola.mp3",
   },
+        {
+    name: "Jupiter Mazha (Lofi Flip)",
+    file: "Jupiter Mazha (Lofi Flip).mp3",
+  },
+        {
+    name: "Kannadi Koodum Kootti - Recreated Version",
+    file: "Kannadi Koodum Kootti - Recreated Version.mp3",
+  },
+        {
+    name: "Marannittumenthino - Unplugged Version",
+    file: "Marannittumenthino - Unplugged Version.mp3",
+  },
+        {
+    name: "Oru Pushpam Mathramen",
+    file: "Oru Pushpam Mathramen.mp3",
+  },
+        {
+    name: "Parayathe Parayunna",
+    file: "Parayathe Parayunna.mp3",
+  },
+        {
+    name: "Sreeragamo - Rendition",
+    file: "Sreeragamo - Rendition.mp3",
+  },
+        {
+    name: "Urukumen Azhalinu Thanalu (Lofi)",
+    file: "Urukumen Azhalinu Thanalu (Lofi).mp3",
+  },
 ];
 
 function getMusicUrl(filename) {
