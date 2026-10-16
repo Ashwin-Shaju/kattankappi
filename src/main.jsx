@@ -912,7 +912,7 @@ function App() {
             </div>
 
             <p className="section-description">
-              ഓരോ ശബ്ദവും നിങ്ങൾക്ക് ഇഷ്ടമുള്ള പോലെ ക്രമീകരിക്കാം.
+              ഓരോ ശബ്ദവും നിങ്ങൾക്ക് ഇഷ്ടമുള്ള പോലെ ക്രമീകരിക്കാം. Blend the sounds of Kerala into your own ambience.
             </p>
           </div>
         </div>
@@ -1245,10 +1245,6 @@ function App() {
             )}
           </article>
         </div>
-
-        <p className="audio-disclaimer">
-          Blend the sounds of Kerala into your own ambience.
-        </p>
       </section>
 
       <footer className="footer">
