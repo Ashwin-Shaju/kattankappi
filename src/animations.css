@@ -1080,3 +1080,212 @@ html {
     transition: none !important;
   }
 }
+
+
+/* =========================================================
+   Extracted component animations from main.jsx (cleaned)
+   ========================================================= */
+
+@keyframes presetShimmer {
+  0%, 100% { background-position: 130% 0; }
+  50% { background-position: -30% 0; }
+}
+@keyframes presetGlowPulse {
+  0%, 100% { opacity: .45; transform: scale(.92); }
+  50% { opacity: .9; transform: scale(1.08); }
+}
+@keyframes presetClickRipple {
+  0% { transform: scale(.15); opacity: .55; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+.preset-card-dynamic {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transform-origin: center;
+  transition:
+    transform 280ms cubic-bezier(.2,.8,.2,1),
+    box-shadow 280ms ease,
+    border-color 280ms ease,
+    filter 280ms ease;
+}
+.preset-card-dynamic::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(115deg, transparent 18%, rgba(255,255,255,.18) 48%, transparent 78%);
+  transform: translateX(-115%);
+  transition: opacity 250ms ease;
+}
+.preset-card-dynamic:hover {
+  transform: translateY(-7px) scale(1.018) !important;
+  filter: saturate(1.12) brightness(1.06);
+  box-shadow: 0 18px 38px rgba(0,0,0,.24), 0 0 0 1px rgba(235,211,153,.22) !important;
+}
+.preset-card-dynamic:hover::before {
+  opacity: 1;
+  animation: presetCardSweep 850ms ease forwards;
+}
+.preset-card-dynamic:active {
+  transform: translateY(-1px) scale(.975) !important;
+  filter: brightness(.98);
+  transition-duration: 100ms;
+}
+.preset-card-dynamic:focus-visible {
+  outline: 2px solid #e4c27e;
+  outline-offset: 4px;
+}
+.preset-card-dynamic.selected {
+  animation: presetSelectedPop 420ms cubic-bezier(.2,.8,.2,1);
+}
+.preset-card-dynamic .preset-emoji {
+  transition: transform 300ms cubic-bezier(.2,.8,.2,1), box-shadow 300ms ease;
+}
+.preset-card-dynamic:hover .preset-emoji {
+  transform: translateY(-3px) rotate(-5deg) scale(1.09);
+  box-shadow: 0 0 30px rgba(235,211,153,.32);
+}
+.preset-card-dynamic.selected .preset-emoji {
+  animation: presetEmojiPop 480ms cubic-bezier(.2,.8,.2,1);
+}
+.preset-card-dynamic .checkmark {
+  animation: presetCheckIn 300ms cubic-bezier(.2,.8,.2,1) both;
+}
+.preset-card-dynamic .preset-glow-orb {
+  animation: presetGlowPulse 5s ease-in-out infinite;
+}
+@keyframes presetCardSweep {
+  from { transform: translateX(-115%); }
+  to { transform: translateX(115%); }
+}
+@keyframes presetSelectedPop {
+  0% { transform: translateY(0) scale(.98); }
+  55% { transform: translateY(-5px) scale(1.025); }
+  100% { transform: translateY(-3px) scale(1); }
+}
+@keyframes presetEmojiPop {
+  0% { transform: scale(.82) rotate(-8deg); }
+  60% { transform: scale(1.16) rotate(5deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+@keyframes presetCheckIn {
+  from { opacity: 0; transform: scale(.55) rotate(-35deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+@media (hover: none) {
+  .preset-card-dynamic:active {
+    transform: scale(.97) !important;
+    filter: brightness(1.08);
+  }
+}
+.sound-card-atmospheric {
+  -webkit-tap-highlight-color: transparent;
+  transform-origin: center;
+}
+.sound-card-atmospheric:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 34px rgba(0,0,0,.22), 0 0 0 1px rgba(235,211,153,.16) !important;
+}
+.sound-card-atmospheric:active {
+  transform: scale(.985);
+}
+.sound-card-atmospheric .sound-card-motif {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-align: right;
+  text-shadow: 0 0 18px currentColor;
+}
+.sound-card-atmospheric.sound-card-on .sound-card-motif-rain {
+  animation: soundRainDrift 1.8s linear infinite;
+}
+.sound-card-atmospheric.sound-card-on .sound-card-motif-steam {
+  animation: soundSteamFloat 2.6s ease-in-out infinite;
+}
+.sound-card-atmospheric.sound-card-on .sound-card-motif-crickets {
+  animation: soundCricketPulse 1.6s ease-in-out infinite;
+}
+.sound-card-atmospheric.sound-card-on .sound-card-motif-wind {
+  animation: soundWindSweep 2.2s ease-in-out infinite;
+}
+.sound-card-atmospheric.sound-card-on .sound-card-motif-talk {
+  animation: soundTalkPulse 1.4s ease-in-out infinite;
+}
+.sound-card-atmospheric.sound-card-on .sound-card-motif-storm {
+  animation: soundStormFlash 2.8s ease-in-out infinite;
+}
+@keyframes soundRainDrift {
+  from { transform: translateY(-3px); opacity: .5; }
+  50% { opacity: 1; }
+  to { transform: translateY(7px); opacity: .6; }
+}
+@keyframes soundSteamFloat {
+  0%, 100% { transform: translateY(3px); opacity: .55; }
+  50% { transform: translateY(-6px); opacity: 1; }
+}
+@keyframes soundCricketPulse {
+  0%, 100% { transform: scale(.94); opacity: .5; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+@keyframes soundWindSweep {
+  0%, 100% { transform: translateX(-4px); opacity: .5; }
+  50% { transform: translateX(5px); opacity: 1; }
+}
+@keyframes soundTalkPulse {
+  0%, 100% { transform: scale(.94); opacity: .48; }
+  50% { transform: scale(1.04); opacity: .95; }
+}
+@keyframes soundStormFlash {
+  0%, 88%, 100% { opacity: .45; filter: brightness(1); }
+  90% { opacity: 1; filter: brightness(1.7); }
+  94% { opacity: .6; filter: brightness(1.1); }
+}
+.sound-card-atmospheric .sound-toggle:hover {
+  transform: scale(1.08);
+}
+.sound-card-atmospheric .sound-toggle:active {
+  transform: scale(.92);
+}
+.sound-card-atmospheric input[type="range"] {
+  min-height: 24px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .preset-card-dynamic,
+  .preset-card-dynamic *,
+  .preset-card-dynamic::before,
+  .sound-card-atmospheric,
+  .sound-card-atmospheric * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@keyframes cleanSoundEnter { from { opacity:0; transform:translateY(9px); } to { opacity:1; transform:translateY(0); } }
+
+@keyframes cleanIconBreath { 0%,100% { box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 0 0 rgba(213,193,143,0); } 50% { box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 0 16px rgba(213,193,143,.07); } }
+
+@keyframes cleanToggleIn { from { transform:scale(.82); } 65% { transform:scale(1.08); } to { transform:scale(1); } }
+
+@media (prefers-reduced-motion:reduce) { .sound-card-clean, .sound-card-clean *, .sound-card-clean::before, .sound-card-clean::after { animation:none !important; transition:none !important; } }
+
+@keyframes radioGlassEnter { from { opacity:0; transform:translateY(12px) scale(.99); } to { opacity:1; transform:translateY(0) scale(1); } }
+
+@keyframes radioGlowDrift { from { transform:translate(-8px,0) scale(.92); opacity:.65; } to { transform:translate(8px,14px) scale(1.08); opacity:1; } }
+
+@media (prefers-reduced-motion:reduce) { .radio-player,.radio-player *,.radio-player::before,.radio-player::after { animation:none !important; transition:none !important; } }
+
+
+/* Theme transition: a quiet, coordinated colour shift when switching modes. */
+html, body, .app-shell, .topbar, .theme-toggle, .sound-card, .bottom-card, .sleep-timer, .radio-player, .preset-card, .footer {
+  transition-property: background-color, color, border-color, box-shadow;
+  transition-duration: 220ms;
+  transition-timing-function: ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  html, body, .app-shell, .topbar, .theme-toggle, .sound-card, .bottom-card, .sleep-timer, .radio-player, .preset-card, .footer {
+    transition-duration: 0ms !important;
+  }
+}
