@@ -1139,8 +1139,8 @@ button:focus-visible, input:focus-visible {
 /* Kattankappi Radio — premium glassmorphism */
 /* Keep the collapsed music player compact like an ambience card. */
 .radio-player.playlist-collapsed {
-  height: 200px !important;
-  min-height: 200px !important;
+  height: 208px !important;
+  min-height: 208px !important;
   box-sizing: border-box !important;
   display: flex !important;
   flex-direction: column !important;
@@ -1172,7 +1172,7 @@ button:focus-visible, input:focus-visible {
 .radio-player.playlist-open { height: auto !important; min-height: 0 !important; }
 
 @media (max-width: 600px) {
-  .radio-player.playlist-collapsed { height: 200px !important; min-height: 200px !important; padding: 15px !important; }
+  .radio-player.playlist-collapsed { height: 208px !important; min-height: 208px !important; padding: 15px !important; }
 }
 
 .radio-player {
