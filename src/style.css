@@ -1981,10 +1981,34 @@ button:focus-visible, input:focus-visible {
 :root[data-theme="light"] .hero-image-banner .hero-banner-caption {
   color: #e3e4d3 !important;
 }
-/* Kattankappi — force ambient sound controls to black in light mode */
-:root[data-theme="light"] .sound-grid > article.sound-card:not(.radio-player) .sound-card-header .sound-toggle,
-:root[data-theme="light"] .sound-grid > article.sound-card:not(.radio-player) .volume-label,
-:root[data-theme="light"] .sound-grid > article.sound-card:not(.radio-player) .volume-label span,
-:root[data-theme="light"] .sound-grid > article.sound-card:not(.radio-player) .volume-label strong {
-  color: #000 !important;
+
+
+/* =========================================================
+   LIGHT THEME READABILITY FIX — AMBIENCE CARD TOGGLE + VOLUME
+   Only changes text/icon colors; does not affect layout or spacing.
+   ========================================================= */
+:root[data-theme="light"] .sound-grid .sound-card:not(.radio-player) .sound-toggle,
+:root[data-theme="light"] .sound-grid .sound-card:not(.radio-player) .sound-toggle *,
+:root[data-theme="light"] .sound-card-clean .clean-sound-toggle,
+:root[data-theme="light"] .sound-card-clean .clean-sound-toggle *,
+:root[data-theme="light"] .sound-card-clean .clean-volume-row,
+:root[data-theme="light"] .sound-card-clean .clean-volume-row span,
+:root[data-theme="light"] .sound-card-clean .clean-volume-row strong,
+:root[data-theme="light"] .sound-card-clean .clean-volume-row small,
+:root[data-theme="light"] .sound-card .volume-label,
+:root[data-theme="light"] .sound-card .volume-label span,
+:root[data-theme="light"] .sound-card .volume-label strong {
+  color: #000000 !important;
+}
+
+/* Keep the toggle's border visible on the light card background. */
+:root[data-theme="light"] .sound-grid .sound-card:not(.radio-player) .sound-toggle,
+:root[data-theme="light"] .sound-card-clean .clean-sound-toggle {
+  border-color: #000000 !important;
+}
+
+/* Preserve the existing golden slider track/thumb accent. */
+:root[data-theme="light"] .sound-card-clean .clean-volume-slider,
+:root[data-theme="light"] .sound-card input[type="range"] {
+  accent-color: #b48a42 !important;
 }
