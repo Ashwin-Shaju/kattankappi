@@ -299,24 +299,18 @@ function App() {
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   }
 
-  // iOS Safari does not reliably let web pages change HTMLAudioElement.volume.
-  // Use a Web Audio gain node on iOS so the in-app slider actually changes
-  // music loudness; keep native media volume on other devices for simplicity.
+  // Keep the music element as native HTML media. Routing music through a
+  // Web Audio graph can leave it silent while AudioContext is suspended (most
+  // noticeably on iOS), making it appear to work only after touching a slider.
+  // Native media playback is also the safer path for lock-screen/background audio.
   function applyMusicVolume(audio, value) {
     if (!audio) return;
     const level = Math.max(0, Math.min(1, Number(value) / 100 || 0));
-
-    if (isIOSDevice()) {
-      const context = resumeAudioContext();
-      if (context) {
-        setAudioElementVolume(audio, level);
-        // Keep the media element at unity gain; the Web Audio node controls volume.
-        audio.volume = 1;
-        return;
-      }
+    try {
+      audio.volume = level;
+    } catch {
+      // Some mobile browsers manage media volume at the system level.
     }
-
-    audio.volume = level;
   }
 
   useEffect(() => {
@@ -546,6 +540,9 @@ function App() {
     shouldAutoplayRef.current = false;
 
     try {
+      // Start native media playback directly from the button gesture.
+      // Do not require an AudioContext or a volume-slider interaction.
+      applyMusicVolume(audio, musicVolume);
       await audio.play();
       setMusicPlaying(true);
       setMusicError(false);
@@ -637,12 +634,7 @@ function App() {
     const nextVolume = Math.max(0, Math.min(100, Number(value) || 0));
 
     const audio = musicAudioRef.current;
-    if (audio) {
-      // Resume the audio context directly from the user's slider interaction.
-      // This is required by iOS Safari when the music volume uses a gain node.
-      if (isIOSDevice()) resumeAudioContext();
-      applyMusicVolume(audio, nextVolume);
-    }
+    if (audio) applyMusicVolume(audio, nextVolume);
 
     setMusicVolume(nextVolume);
   }
@@ -1138,12 +1130,6 @@ function App() {
                   aria-label={`Music volume ${musicVolume}%`}
                   aria-valuetext={`${musicVolume}%`}
                   style={{ touchAction: "pan-y", pointerEvents: "auto" }}
-                  onPointerDown={() => {
-                    if (isIOSDevice()) resumeAudioContext();
-                  }}
-                  onTouchStart={() => {
-                    if (isIOSDevice()) resumeAudioContext();
-                  }}
                   onInput={(event) =>
                     updateMusicVolume(event.currentTarget.value)
                   }
