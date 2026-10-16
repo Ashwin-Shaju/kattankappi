@@ -2012,3 +2012,36 @@ button:focus-visible, input:focus-visible {
 :root[data-theme="light"] .sound-card input[type="range"] {
   accent-color: #b48a42 !important;
 }
+
+
+/* Buy Me a Coffee footer button */
+.footer-buymeacoffee {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  line-height: 0;
+  border-radius: 8px;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.footer-buymeacoffee img {
+  display: block;
+  width: 190px;
+  max-width: 100%;
+  height: auto;
+}
+
+.footer-buymeacoffee:hover {
+  transform: translateY(-2px);
+  opacity: 0.94;
+}
+
+.footer-buymeacoffee:focus-visible {
+  outline: 2px solid var(--gold, #b48a42);
+  outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+  .footer-buymeacoffee img { width: 175px; }
+}

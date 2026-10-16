@@ -293,16 +293,36 @@ function App() {
     audio.volume = level;
   }
 
-  // Keep radio volume on the native HTMLAudioElement. Routing the music
-  // player through Web Audio can cause iOS Safari to suspend playback when
-  // the screen locks or the browser moves to the background.
+  function isIOSDevice() {
+    if (typeof navigator === "undefined") return false;
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  }
+
+  // iOS Safari does not reliably let web pages change HTMLAudioElement.volume.
+  // Use a Web Audio gain node on iOS so the in-app slider actually changes
+  // music loudness; keep native media volume on other devices for simplicity.
+  function applyMusicVolume(audio, value) {
+    if (!audio) return;
+    const level = Math.max(0, Math.min(1, Number(value) / 100 || 0));
+
+    if (isIOSDevice()) {
+      const context = resumeAudioContext();
+      if (context) {
+        setAudioElementVolume(audio, level);
+        // Keep the media element at unity gain; the Web Audio node controls volume.
+        audio.volume = 1;
+        return;
+      }
+    }
+
+    audio.volume = level;
+  }
+
   useEffect(() => {
     const audio = musicAudioRef.current;
     if (!audio) return;
-
-    // Keep music on native HTMLMediaElement playback (not Web Audio) so
-    // mobile Safari/Chrome can continue it in the background where permitted.
-    audio.volume = Math.max(0, Math.min(1, musicVolume / 100));
+    applyMusicVolume(audio, musicVolume);
   }, [musicVolume, trackIndex]);
 
   // Register media-session metadata and lock-screen controls where supported.
@@ -495,7 +515,7 @@ function App() {
     if (!audio || !shouldAutoplayRef.current) return;
 
     try {
-      audio.volume = Math.max(0, Math.min(1, musicVolume / 100));
+      applyMusicVolume(audio, musicVolume);
       await audio.play();
 
       shouldAutoplayRef.current = false;
@@ -616,10 +636,12 @@ function App() {
   function updateMusicVolume(value) {
     const nextVolume = Math.max(0, Math.min(100, Number(value) || 0));
 
-    if (musicAudioRef.current) {
-      // Use the native media volume for the radio so background playback
-      // does not depend on a Web Audio context staying active on mobile.
-      musicAudioRef.current.volume = nextVolume / 100;
+    const audio = musicAudioRef.current;
+    if (audio) {
+      // Resume the audio context directly from the user's slider interaction.
+      // This is required by iOS Safari when the music volume uses a gain node.
+      if (isIOSDevice()) resumeAudioContext();
+      applyMusicVolume(audio, nextVolume);
     }
 
     setMusicVolume(nextVolume);
@@ -730,7 +752,7 @@ function App() {
 
       <section className="section">
         <span className="section-label">PICK YOUR MOMENT</span>
-        <h2>ഇന്നത്തെ vibe എന്താണ് ?</h2>
+        <h2>ഇന്നത്തെ vibe എന്താണ്?</h2>
 
         <p className="section-description">
           ഒരു preset തിരഞ്ഞെടുക്കൂ. നിങ്ങളുടെ mood-ന് ചേരുന്ന ambience കണ്ടെത്തൂ.
@@ -890,7 +912,7 @@ function App() {
             </div>
 
             <p className="section-description">
-              ഓരോ ശബ്ദവും നിങ്ങൾക്ക് ഇഷ്ടമുള്ള പോലെ ക്രമീകരിക്കാം. Blend the sounds of Kerala into your own ambience.
+              ഓരോ ശബ്ദവും നിങ്ങൾക്ക് ഇഷ്ടമുള്ള പോലെ ക്രമീകരിക്കാം.
             </p>
           </div>
         </div>
@@ -993,7 +1015,7 @@ function App() {
               preload="auto"
               onLoadedMetadata={(event) => {
                 setMusicDuration(event.currentTarget.duration || 0);
-                event.currentTarget.volume = Math.max(0, Math.min(1, musicVolume / 100));
+                applyMusicVolume(event.currentTarget, musicVolume);
                 setMusicError(false);
               }}
               onCanPlay={() => {
@@ -1115,6 +1137,13 @@ function App() {
                   value={musicVolume}
                   aria-label={`Music volume ${musicVolume}%`}
                   aria-valuetext={`${musicVolume}%`}
+                  style={{ touchAction: "pan-y", pointerEvents: "auto" }}
+                  onPointerDown={() => {
+                    if (isIOSDevice()) resumeAudioContext();
+                  }}
+                  onTouchStart={() => {
+                    if (isIOSDevice()) resumeAudioContext();
+                  }}
                   onInput={(event) =>
                     updateMusicVolume(event.currentTarget.value)
                   }
@@ -1216,6 +1245,10 @@ function App() {
             )}
           </article>
         </div>
+
+        <p className="audio-disclaimer">
+          Blend the sounds of Kerala into your own ambience.
+        </p>
       </section>
 
       <footer className="footer">
@@ -1247,6 +1280,20 @@ function App() {
           </svg>
 
           <span>Ashwin Shaju</span>
+        </a>
+
+        <a
+          className="footer-buymeacoffee"
+          href="https://www.buymeacoffee.com/ashwnshaju"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Buy Ashwin a coffee on Buy Me a Coffee"
+        >
+          <img
+            src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=ashwnshaju&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"
+            alt="Buy me a coffee"
+            loading="lazy"
+          />
         </a>
 
         <span>MADE WITH ♥ IN KERALA</span>
