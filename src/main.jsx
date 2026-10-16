@@ -730,7 +730,7 @@ function App() {
 
       <section className="section">
         <span className="section-label">PICK YOUR MOMENT</span>
-        <h2>ഇന്നത്തെ vibe എന്താണ്?</h2>
+        <h2>ഇന്നത്തെ vibe എന്താണ് ?</h2>
 
         <p className="section-description">
           ഒരു preset തിരഞ്ഞെടുക്കൂ. നിങ്ങളുടെ mood-ന് ചേരുന്ന ambience കണ്ടെത്തൂ.
@@ -890,7 +890,7 @@ function App() {
             </div>
 
             <p className="section-description">
-              ഓരോ ശബ്ദവും നിങ്ങൾക്ക് ഇഷ്ടമുള്ള പോലെ ക്രമീകരിക്കാം.
+              ഓരോ ശബ്ദവും നിങ്ങൾക്ക് ഇഷ്ടമുള്ള പോലെ ക്രമീകരിക്കാം. Blend the sounds of Kerala into your own ambience.
             </p>
           </div>
         </div>
@@ -1216,10 +1216,6 @@ function App() {
             )}
           </article>
         </div>
-
-        <p className="audio-disclaimer">
-          Blend the sounds of Kerala into your own ambience.
-        </p>
       </section>
 
       <footer className="footer">
