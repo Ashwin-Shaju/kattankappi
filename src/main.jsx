@@ -237,10 +237,19 @@ function App() {
   function resumeAudioContext() {
     const context = getAudioContext();
 
-    if (context && context.state === "suspended") {
-      context.resume().catch((error) => {
+    if (context && context.state !== "running") {
+      // Call this directly from a user gesture (slider, preset, or play button)
+      // so iOS Safari can resume the mixer after it has suspended the context.
+      try {
+        const resumeResult = context.resume();
+        if (resumeResult && typeof resumeResult.catch === "function") {
+          resumeResult.catch((error) => {
+            console.warn("Could not resume the audio context.", error);
+          });
+        }
+      } catch (error) {
         console.warn("Could not resume the audio context.", error);
-      });
+      }
     }
 
     return context;
@@ -288,9 +297,12 @@ function App() {
   // player through Web Audio can cause iOS Safari to suspend playback when
   // the screen locks or the browser moves to the background.
   useEffect(() => {
-    if (musicAudioRef.current) {
-      musicAudioRef.current.volume = Math.max(0, Math.min(1, musicVolume / 100));
-    }
+    const audio = musicAudioRef.current;
+    if (!audio) return;
+
+    // Keep music on native HTMLMediaElement playback (not Web Audio) so
+    // mobile Safari/Chrome can continue it in the background where permitted.
+    audio.volume = Math.max(0, Math.min(1, musicVolume / 100));
   }, [musicVolume, trackIndex]);
 
   // Register media-session metadata and lock-screen controls where supported.
