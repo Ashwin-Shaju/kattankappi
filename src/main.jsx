@@ -1338,7 +1338,7 @@ function App() {
         <div className="footer-support-actions">
           <a
             className="footer-paytm"
-            href="upi://pay?pa=ashwin.shaju%40ptyes&pn=Ashwin%20Shaju&tn=Support%20Kattankappi&cu=INR"
+            href="upi://pay?pa=ashwin.shaju@ptyes&pn=Ashwin%20Shaju&tn=Support%20Kattankappi&cu=INR"
             aria-label="Open a UPI app with Ashwin Shaju and ashwin.shaju@ptyes prefilled to support Kattankappi"
             title="Open your UPI app with ashwin.shaju@ptyes prefilled"
           >
@@ -1351,7 +1351,7 @@ function App() {
 
           <a
             className="footer-buymeacoffee"
-            href="https://www.buymeacoffee.com/ashwnshaju"
+            href="https://buymeacoffee.com/ashwnshaju"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Buy Ashwin a coffee on Buy Me a Coffee"
@@ -1359,7 +1359,8 @@ function App() {
             <img
               src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=ashwnshaju&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"
               alt="Buy me a coffee"
-              loading="lazy"
+              loading="eager"
+              decoding="async"
             />
           </a>
         </div>

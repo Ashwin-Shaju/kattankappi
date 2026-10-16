@@ -1139,8 +1139,8 @@ button:focus-visible, input:focus-visible {
 /* Kattankappi Radio — premium glassmorphism */
 /* Keep the collapsed music player compact like an ambience card. */
 .radio-player.playlist-collapsed {
-  height: 210px !important;
-  min-height: 210px !important;
+  height: 200px !important;
+  min-height: 200px !important;
   box-sizing: border-box !important;
   display: flex !important;
   flex-direction: column !important;
@@ -1172,7 +1172,7 @@ button:focus-visible, input:focus-visible {
 .radio-player.playlist-open { height: auto !important; min-height: 0 !important; }
 
 @media (max-width: 600px) {
-  .radio-player.playlist-collapsed { height: 210px !important; min-height: 210px !important; padding: 15px !important; }
+  .radio-player.playlist-collapsed { height: 200px !important; min-height: 200px !important; padding: 15px !important; }
 }
 
 .radio-player {
@@ -2224,4 +2224,50 @@ button:focus-visible, input:focus-visible {
   .footer-redesigned .footer-paytm { padding: 7px 9px; }
   .footer-redesigned .footer-buymeacoffee,
   .footer-redesigned .footer-buymeacoffee img { max-width: 120px; }
+}
+
+
+/* Mobile-safe footer support links: keep both actions visible and tappable. */
+.footer.footer-redesigned .footer-support-actions {
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+}
+.footer.footer-redesigned .footer-support-actions > a {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  pointer-events: auto;
+  touch-action: manipulation;
+  text-decoration: none;
+}
+.footer.footer-redesigned .footer-buymeacoffee {
+  min-width: 120px;
+  min-height: 40px;
+}
+.footer.footer-redesigned .footer-buymeacoffee img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+.footer.footer-redesigned .footer-paytm {
+  cursor: pointer;
+}
+@media (max-width: 520px) {
+  .footer.footer-redesigned .footer-support-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer.footer-redesigned .footer-buymeacoffee {
+    max-width: 132px;
+    min-width: 120px;
+  }
+  .footer.footer-redesigned .footer-buymeacoffee img {
+    max-width: 132px;
+  }
 }
