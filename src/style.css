@@ -1959,3 +1959,32 @@ button:focus-visible, input:focus-visible {
     animation: none;
   }
 }
+/* Keep banner text colors unchanged in light theme.
+   Do not modify banner padding or positioning. */
+
+:root[data-theme="light"] .hero-image-banner .hero-banner-content h1 {
+  color: #fffaf0 !important;
+}
+
+:root[data-theme="light"] .hero-image-banner .hero-banner-content h1 em {
+  color: #e8c47b !important;
+}
+
+:root[data-theme="light"] .hero-image-banner .hero-banner-eyebrow {
+  color: #e8c47b !important;
+}
+
+:root[data-theme="light"] .hero-image-banner .hero-banner-subtitle {
+  color: #f3f0e7 !important;
+}
+
+:root[data-theme="light"] .hero-image-banner .hero-banner-caption {
+  color: #e3e4d3 !important;
+}
+/* Kattankappi — force ambient sound controls to black in light mode */
+:root[data-theme="light"] .sound-grid > article.sound-card:not(.radio-player) .sound-card-header .sound-toggle,
+:root[data-theme="light"] .sound-grid > article.sound-card:not(.radio-player) .volume-label,
+:root[data-theme="light"] .sound-grid > article.sound-card:not(.radio-player) .volume-label span,
+:root[data-theme="light"] .sound-grid > article.sound-card:not(.radio-player) .volume-label strong {
+  color: #000 !important;
+}
